@@ -1,13 +1,4 @@
-
-/**
- * create Interface for game
- * @field {string} id - id of the game
- * @field {number} attendance - number
- */
-export interface Game {
-  id: string;
-  attendance: number;
-}
+import {GameDetails} from "./game-details.interface";
 
 /**
  * create Interface Player
@@ -112,6 +103,6 @@ export interface Statistics {
  */
 export interface LocalGame {
   sourceId: string;
-  game: Game;
+  game: GameDetails;
   statistics: Statistics;
 }
