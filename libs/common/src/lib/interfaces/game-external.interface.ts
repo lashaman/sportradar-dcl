@@ -52,6 +52,6 @@ export interface GameExternalDetails extends GameDetails {
  * @field {GameExternalDetails} game - game object with all the game data
  */
 export interface GameExternal {
-  sourceId: number;
+  sourceId: string;
   game: GameExternalDetails;
 }

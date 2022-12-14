@@ -6,6 +6,6 @@ import {GameDetails} from "./game-details.interface";
  * @field {GameDetails} game - game object with all the game data
  */
 export interface GameData {
-  sourceId: number;
+  sourceId: string;
   game: GameDetails;
 }
