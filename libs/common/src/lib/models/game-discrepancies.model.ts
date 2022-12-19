@@ -1,12 +1,13 @@
-// import {GameData} from "../interfaces/game-data.interface";
-// import {GameDiscrepancies} from "../interfaces/game-discrepancies.interface";
-//
-// export class GameDiscrepanciesModel implements GameDiscrepancies {
-//   private local: GameData;
-//   private external: GameData;
-//
-//   constructor(local: GameData, external: GameData) {
-//     this.local = local;
-//     this.external = local;
-//   }
-// }
+import {GameDiscrepanciesInterface} from "../interfaces/game-discrepancies.interface";
+import {LocalExternalDiscrepanciesInterface} from "../interfaces/local-external-discrepancies.interface";
+import {LocalExternalDiscrepanciesModel} from "./local-external-discrepancies.model";
+
+export class GameDiscrepanciesModel implements GameDiscrepanciesInterface {
+  gameId: string;
+  attendanceDiscrepancies: LocalExternalDiscrepanciesInterface;
+
+  constructor(gameId: string, localAttendance: number, externalAttendance: number) {
+    this.gameId = gameId;
+    this.attendanceDiscrepancies = new LocalExternalDiscrepanciesModel(localAttendance, externalAttendance);
+  }
+}

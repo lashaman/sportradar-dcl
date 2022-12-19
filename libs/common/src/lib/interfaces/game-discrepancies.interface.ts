@@ -1,6 +1,6 @@
-import {GameData} from "./game-data.interface";
+import {LocalExternalDiscrepanciesInterface} from "./local-external-discrepancies.interface";
 
-export interface GameDiscrepancies {
-  local: GameData;
-  external: GameData;
+export interface GameDiscrepanciesInterface {
+  gameId: string;
+  attendanceDiscrepancies: LocalExternalDiscrepanciesInterface;
 }

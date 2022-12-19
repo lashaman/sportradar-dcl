@@ -1,12 +1,9 @@
-
-
 import express from 'express';
-import path from 'path';
-import {readJsonFile} from "../../../libs/common/src/lib/utils/read-json.util";
 import {ApiRouter} from "./api.route";
+import cors from 'cors';
 
 const app = express();
-
+app.use(cors())
 app.use('/api', ApiRouter)
 
 const port = process.env.port || 3333;

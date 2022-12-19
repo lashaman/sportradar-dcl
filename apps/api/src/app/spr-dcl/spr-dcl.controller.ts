@@ -4,6 +4,7 @@ export class SprDclController {
   constructor() {}
 
   getDiscrepancies(req,res): object {
-    return SprDclService.getDiscrepancies(req,res);
+    const response = SprDclService.getDiscrepancies(req);
+    return res.status(200).send(response);
   }
 }

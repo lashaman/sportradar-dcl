@@ -13,15 +13,17 @@ export function findDiscrepanciesInObjects (home: any, external: any) {
 }
 
 export function findDiscrepanciesInArray (home: Player[], external: Player[]) {
-  console.log('home', home, 'external', external);
   const discrepancies: any[] = [];
   for (let i = 0; i < home.length; i++) {
-    const foundDiscrepancies = findDiscrepanciesInObjects(home[i], external[i]);
-    if (Object.keys(foundDiscrepancies).length > 0) {
-      discrepancies.push(foundDiscrepancies);
+    if(home[i].id === external[i].id) {
+      const foundDiscrepancies = findDiscrepanciesInObjects(home[i], external[i]);
+      if (Object.keys(foundDiscrepancies).length > 0) {
+        discrepancies.push({playerId: home[i].id,...foundDiscrepancies});
+      }
     }
   }
   return discrepancies;
 }
+
 
 

@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+$black-color: #000;
+$white-transparent-color: rgba(255, 255, 255, 0.2);
+$black-transparent-color: rgba(0, 0, 0, 0.2);
+$green-mate-color: #00bfa5;
+a {
+  text-decoration: none;
+  color: $black-color;
+}
+
+.menu-item {
+  text-decoration: none;
+
+  &--active,
+  &:hover {
+    button {
+      background-color: $black-transparent-color;
+      transition: background-color 0.1s ease-in-out;
+      font-weight: bold;
+    }
+    p {
+      font-weight: bold;
+      background-color:$white-transparent-color;
+    }
+  }
+}
+
+.resolved.resolved.resolved {
+  background-color: $green-mate-color;
+}

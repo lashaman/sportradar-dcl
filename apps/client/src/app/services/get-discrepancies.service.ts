@@ -1,11 +1,17 @@
-import {DiscrepancyTypes} from "../../../../api/src/app/spr-dcl/discrepancy-types.enum";
 import axios from "axios";
 
 class GetDiscrepanciesService {
-  async getDiscrepancies(type: DiscrepancyTypes): Promise<any[]> {
-    const response = await axios.get(`http://localhost:3333/discrepancies?type=${type}`);
+  static instance: GetDiscrepanciesService;
+  static getInstance() {
+    if (!GetDiscrepanciesService.instance) {
+      return new GetDiscrepanciesService();
+    }
+    return GetDiscrepanciesService.instance;
+  }
+  async getDiscrepancies(type: string): Promise<any> {
+    const response = await axios.get(`http://localhost:3333/api/discrepancies/get?type=${type}`);
     return response.data;
   }
 }
 
-export default new GetDiscrepanciesService();
+export default  GetDiscrepanciesService.getInstance();

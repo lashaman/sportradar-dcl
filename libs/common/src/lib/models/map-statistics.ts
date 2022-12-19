@@ -1,15 +1,5 @@
 import {Team, TeamExternalDetails} from "../interfaces";
 
-export const MapStatistics = new Map<string, string>(
-  [
-    ['rushAttempts', 'rushing.attempts'],
-    ['rushTds', 'rushing.touchdowns'],
-    ['rushYdsGained', 'rushing.yards'],
-    ['rec', 'receiving.receptions'],
-    ['receivingYards', 'receiving.yards'],
-  ]
-)
-
 /**
  * function to map the statistics
  * Mapping external {externalTeamData} data to external {Team} data according to {MapStatistics} Map

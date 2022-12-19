@@ -1,5 +1,6 @@
-// @ts-ignore
-import * as fs from 'fs';
+
+import * as fs from "fs";
+
 
 /**
  * read json file from disk

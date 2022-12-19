@@ -1,57 +1,71 @@
-import {readJsonFile} from "../../../../../libs/common/src/lib/utils/read-json.util";
 import path from "path";
 import {
-  GameExternal,
-  GameExternalDetails,
-  LocalGame,
-  Statistics, Team,
-  TeamExternalDetails
-} from "../../../../../libs/common/src/lib/interfaces";
-import {GameData} from "../../../../../libs/common/src/lib/interfaces/game-data.interface";
-import {GameDetails} from "../../../../../libs/common/src/lib/interfaces/game-details.interface";
-import {mapStatistics} from "../../../../../libs/common/src/lib/models/map-statistics";
-import {GameDiscrepancies} from "../../../../../libs/common/src/lib/interfaces/game-discrepancies.interface";
-import {findDiscrepanciesInArray, findDiscrepanciesInObjects} from "../../../../../libs/common/src/lib/utils/find-discrepancies";
-import {DiscrepancyTypes} from "./discrepancy-types.enum";
+  AllDiscrepanciesInterface,
+  DiscrepancyTypes, findDiscrepanciesInArray,
+  findDiscrepanciesInObjects,
+  GameDetails,
+  GameExternal, GameExternalDetails, LocalGame,
+  PlayerRushingReceivingDiscrepanciesModel, Statistics, Team
+} from "@sportradar-dcl/common";
+import {GameDiscrepanciesInterface} from "@sportradar-dcl/common";
+import {StatisticsDiscrepanciesInterface} from "@sportradar-dcl/common";
+import {GameDiscrepanciesModel} from "@sportradar-dcl/common";
+import {StatisticsDiscrepanciesModel} from "@sportradar-dcl/common";
+import {readJsonFile} from "./utils/read-json.util";
+import {AllDiscrepanciesModel} from "../../../../../libs/common/src/lib/models/all-discrepancies.model";
+import {LocalGameModel} from "../../../../../libs/common/src/lib/models/local-game.model";
+
 
 class SprDclService {
-  compareGameDiscrepancies(localGameData: GameDetails, externalGameData: GameExternalDetails): object {
+  static instance: SprDclService;
+ static getInstance () {
+    if(!SprDclService.instance) {
+      return new SprDclService();
+    }
+    return SprDclService.instance;
+  }
+  compareGameDiscrepancies(localGameData: GameDetails, externalGameData: GameExternalDetails): GameDiscrepanciesInterface {
     if (localGameData.id === externalGameData.id) {
       if (localGameData.attendance !== externalGameData.attendance) {
-        return {attendance: {local: localGameData, external: externalGameData}};
+        return new GameDiscrepanciesModel(localGameData.id, localGameData.attendance, externalGameData.attendance);
       }
     }
   }
 
-  compareStatisticsDiscrepancies(localStatistics: Statistics, externalStatistics: Statistics): object {
-    const homeRushingTotals = localStatistics.home.rushing.totals;
-    const homeReceivingTotals = localStatistics.home.receiving.totals;
-    const externalRushingTotals = localStatistics.away.rushing.totals;
-    const externalReceivingTotals = localStatistics.away.receiving.totals;
+  compareStatisticsDiscrepancies(localStatistics: Statistics, externalStatistics: Statistics): StatisticsDiscrepanciesInterface {
+    const localHomeRushingTotals = localStatistics.home.rushing.totals;
+    const localHomeReceivingTotals = localStatistics.home.receiving.totals;
+    const externalHomeRushingTotals = externalStatistics.home.rushing.totals;
+    const externalHomeReceivingTotals = externalStatistics.home.receiving.totals;
+    const localAwayRushingTotals = localStatistics.away.rushing.totals;
+    const localAwayReceivingTotals = localStatistics.away.receiving.totals;
+    const externalAwayRushingTotals = externalStatistics.away.rushing.totals;
+    const externalAwayReceivingTotals = externalStatistics.away.receiving.totals;
     let homeRushingDiscrepancies;
+    let homeReceivingDiscrepancies;
     let awayRushingDiscrepancies;
+    let awayReceivingDiscrepancies;
     if (localStatistics.home.id === externalStatistics.home.id) {
-      homeRushingDiscrepancies = findDiscrepanciesInObjects(homeRushingTotals, externalRushingTotals);
+      homeRushingDiscrepancies = {id: localStatistics.home.id, ...findDiscrepanciesInObjects(localHomeRushingTotals, externalHomeRushingTotals)};
+      homeReceivingDiscrepancies = {id: localStatistics.home.id, ...findDiscrepanciesInObjects(localHomeReceivingTotals, externalHomeReceivingTotals)};
     }
     if (localStatistics.away.id === externalStatistics.away.id) {
-      awayRushingDiscrepancies = findDiscrepanciesInObjects(homeReceivingTotals, externalReceivingTotals);
+      awayRushingDiscrepancies = {id: localStatistics.away.id, ...findDiscrepanciesInObjects(localAwayRushingTotals, externalAwayRushingTotals)};
+      awayReceivingDiscrepancies = {id: localStatistics.away.id, ...findDiscrepanciesInObjects(localAwayReceivingTotals, externalAwayReceivingTotals)};
     }
-    return {homeRushingDiscrepancies, awayRushingDiscrepancies};
+    return new StatisticsDiscrepanciesModel(homeReceivingDiscrepancies, homeRushingDiscrepancies, awayReceivingDiscrepancies, awayRushingDiscrepancies);
   }
 
-  comparePlayersDiscrepancies(localTeam: Team, externalTeam: Team): object {
-    const localRushingPlayers = localTeam.rushing.players;
-    const localReceivingPlayers = localTeam.receiving.players;
-    const externalRushingPlayers = externalTeam.rushing.players;
-    const externalReceivingPlayers = externalTeam.receiving.players;
-    let localRushingPlayerDiscrepancies = [];
-    let localReceivingPlayerDiscrepancies = [];
+  comparePlayersDiscrepancies(localTeam: Team, externalTeam: Team): PlayerRushingReceivingDiscrepanciesModel {
     if (localTeam.id === externalTeam.id) {
-      localRushingPlayerDiscrepancies = findDiscrepanciesInArray(localRushingPlayers, externalRushingPlayers);
-      localReceivingPlayerDiscrepancies = findDiscrepanciesInArray(localReceivingPlayers, externalReceivingPlayers);
+      const localRushingPlayers = localTeam.rushing.players;
+      const localReceivingPlayers = localTeam.receiving.players;
+      const externalRushingPlayers = externalTeam.rushing.players;
+      const externalReceivingPlayers = externalTeam.receiving.players;
+      const localRushingPlayerDiscrepancies = findDiscrepanciesInArray(localRushingPlayers, externalRushingPlayers);
+      const localReceivingPlayerDiscrepancies = findDiscrepanciesInArray(localReceivingPlayers, externalReceivingPlayers);
+      return new PlayerRushingReceivingDiscrepanciesModel(localTeam.id, localRushingPlayerDiscrepancies, localReceivingPlayerDiscrepancies);
     }
-    return {localRushingPlayerDiscrepancies, localReceivingPlayerDiscrepancies};
-
   }
 
   /**
@@ -60,23 +74,11 @@ class SprDclService {
    * @returns {LocalGame} localGameData - local game data
    */
   mapExternalGameData(externalGameData: GameExternal): LocalGame {
-    const localGameData: LocalGame = {
-      sourceId: externalGameData.sourceId,
-      game: {
-        id: externalGameData.game.id,
-        attendance: externalGameData.game.attendance
-      },
-      statistics: {
-        home: mapStatistics(externalGameData.game.home),
-        away: mapStatistics(externalGameData.game.away),
-      }
-    }
-    return localGameData;
+    return new LocalGameModel(externalGameData.sourceId, externalGameData.game);
   }
 
-  getDiscrepancies(req, res): object {
+  getDiscrepancies(req): AllDiscrepanciesInterface {
     const type = req.query.type;
-    console.log('type', type);
     const sr = readJsonFile(path.join('C:/Users/lasha/Documents/smm_exercise', 'sr.json'), 'utf-8', (err, data) => {
       if (err) {
       }
@@ -87,28 +89,35 @@ class SprDclService {
       }
       return this.mapExternalGameData(data);
     });
-    let returnObject: any = {};
+    let returnObject: AllDiscrepanciesInterface = {} as AllDiscrepanciesInterface;
     switch (type) {
       case DiscrepancyTypes.GAME:
-        returnObject.gameDiscrepancies = this.compareGameDiscrepancies(sr.game, external.game);
+        returnObject = new AllDiscrepanciesModel(this.compareGameDiscrepancies(external.game, sr.game));
         break;
       case DiscrepancyTypes.TEAM:
-        returnObject.statisticsDiscrepancies = this.compareStatisticsDiscrepancies(sr.statistics, external.statistics);
+        returnObject = new AllDiscrepanciesModel(
+          null,
+          this.compareStatisticsDiscrepancies(sr.statistics, external.statistics)
+        );
         break;
       case DiscrepancyTypes.PLAYER:
-        returnObject.homePlayersDiscrepancies = this.comparePlayersDiscrepancies(sr.statistics.home, external.statistics.home);
-        returnObject.awayPlayersDiscrepancies = this.comparePlayersDiscrepancies(sr.statistics.away, external.statistics.away);
+        returnObject = new AllDiscrepanciesModel(
+          null,
+          null,
+          this.comparePlayersDiscrepancies(sr.statistics.home, external.statistics.home),
+          this.comparePlayersDiscrepancies(sr.statistics.away, external.statistics.away)
+        );
         break;
       default:
-        returnObject.gameDiscrepancies = this.compareGameDiscrepancies(sr.game, external.game);
-        returnObject.statisticsDiscrepancies = this.compareStatisticsDiscrepancies(sr.statistics, external.statistics);
-        returnObject.homePlayersDiscrepancies = this.comparePlayersDiscrepancies(sr.statistics.home, external.statistics.home);
-        returnObject.awayPlayersDiscrepancies = this.comparePlayersDiscrepancies(sr.statistics.away, external.statistics.away);
-
+        returnObject = new AllDiscrepanciesModel(
+          this.compareGameDiscrepancies(sr.game, external.game),
+          this.compareStatisticsDiscrepancies(sr.statistics, external.statistics),
+          this.comparePlayersDiscrepancies(sr.statistics.home, external.statistics.home),
+          this.comparePlayersDiscrepancies(sr.statistics.away, external.statistics.away)
+        );
     }
 
-    return res.status(200).send(returnObject);
+    return returnObject;
   }
 }
-
-export default new SprDclService();
+export default SprDclService.getInstance();

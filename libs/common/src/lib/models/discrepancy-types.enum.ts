@@ -4,3 +4,4 @@ export enum DiscrepancyTypes {
   GAME = 'game',
   TEAM = 'team',
 }
+

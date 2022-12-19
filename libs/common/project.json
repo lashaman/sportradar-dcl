@@ -8,6 +8,8 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
+        "target": "node",
+        "compiler": "tsc",
         "lintFilePatterns": ["libs/common/**/*.ts"]
       }
     },
