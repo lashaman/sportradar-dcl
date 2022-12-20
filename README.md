@@ -15,3 +15,13 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
+## to start client app and server app
+nx run client:serve
+nx run api:serve
+## to run test
+nx run api:test
+nx run client:test
+## Pass  sr and external data
+in order to make api read the sr and external files you need to pass files to spr-dcl.service getDiscrepancies method
+
+

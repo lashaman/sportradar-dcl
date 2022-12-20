@@ -1,49 +1,42 @@
-import NxWelcome from './nx-welcome';
-
-import { Route, Routes, Link } from 'react-router-dom';
+import {Route, Routes, Link} from 'react-router-dom';
+import {AllDiscrepancies, PlayersDiscrepancies, TeamDiscrepancies} from "./config/lazy-loaded-routes";
+import {Suspense} from "react";
+import {appRoutes} from "./config/app.routes";
+import MainMenu from "./components/main-menu";
+import 'normalize.css';
+import Container from '@mui/material/Container';
 
 export function App() {
   return (
     <>
-      <NxWelcome title="client" />
-      <div />
-
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
       <div role="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
+        <MainMenu/>
       </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
+
+      <Container maxWidth="xl">
+        <Routes>
+          <Route path={appRoutes.main} element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <AllDiscrepancies/>
+            </Suspense>
+          }/>
+          <Route path={appRoutes.teamDiscrepancies} element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <TeamDiscrepancies/>
+            </Suspense>
+          }/>
+          <Route path={appRoutes.playersDiscrepancies} element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <PlayersDiscrepancies/>
+            </Suspense>
+          }/>
+          <Route path={appRoutes.allDiscrepancies} element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <AllDiscrepancies/>
+            </Suspense>
+          }/>
+        </Routes>
+      </Container>
     </>
   );
 }
