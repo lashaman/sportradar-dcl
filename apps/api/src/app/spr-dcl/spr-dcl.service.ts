@@ -5,15 +5,13 @@ import {
   findDiscrepanciesInObjects,
   GameDetails,
   GameExternal, GameExternalDetails, LocalGame,
-  PlayerRushingReceivingDiscrepanciesModel, Statistics, Team
+  PlayerRushingReceivingDiscrepanciesModel, Statistics, Team,
+  GameDiscrepanciesInterface, StatisticsDiscrepanciesInterface, GameDiscrepanciesModel,
+  StatisticsDiscrepanciesModel,
+  AllDiscrepanciesModel,
+  LocalGameModel
 } from "@sportradar-dcl/common";
-import {GameDiscrepanciesInterface} from "@sportradar-dcl/common";
-import {StatisticsDiscrepanciesInterface} from "@sportradar-dcl/common";
-import {GameDiscrepanciesModel} from "@sportradar-dcl/common";
-import {StatisticsDiscrepanciesModel} from "@sportradar-dcl/common";
-import {readJsonFile} from "./utils/read-json.util";
-import {AllDiscrepanciesModel} from "../../../../../libs/common/src/lib/models/all-discrepancies.model";
-import {LocalGameModel} from "../../../../../libs/common/src/lib/models/local-game.model";
+import {UTIL_VARS, readJsonFile} from "./utils";
 
 
 class SprDclService {
@@ -79,12 +77,12 @@ class SprDclService {
 
   getDiscrepancies(req): AllDiscrepanciesInterface {
     const type = req.query.type;
-    const sr = readJsonFile(path.join('C:/Users/lasha/Documents/smm_exercise', 'sr.json'), 'utf-8', (err, data) => {
+    const sr = readJsonFile(UTIL_VARS.LOCAL_FILE_PATH, 'utf-8', (err, data) => {
       if (err) {
       }
       return data;
     });
-    const external = readJsonFile(path.join('C:/Users/lasha/Documents/smm_exercise', 'external.json'), 'utf-8', (err, data) => {
+    const external = readJsonFile(UTIL_VARS.EXTERNAL_FILE_PATH, 'utf-8', (err, data) => {
       if (err) {
       }
       return this.mapExternalGameData(data);
@@ -121,3 +119,7 @@ class SprDclService {
   }
 }
 export default SprDclService.getInstance();
+
+
+
+
