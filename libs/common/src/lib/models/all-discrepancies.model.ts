@@ -11,7 +11,7 @@ export class AllDiscrepanciesModel implements AllDiscrepanciesInterface {
   homePlayersDiscrepancies: PlayerRushingReceivingDiscrepanciesModel | undefined;
   awayPlayersDiscrepancies: PlayerRushingReceivingDiscrepanciesModel | undefined;
 
-  constructor(gameDiscrepancies?: GameDiscrepanciesModel, statisticsDiscrepancies?: StatisticsDiscrepanciesModel, homePlayersDiscrepancies?: PlayerRushingReceivingDiscrepanciesModel, awayPlayersDiscrepancies?: PlayerRushingReceivingDiscrepanciesModel) {
+  constructor(gameDiscrepancies?: GameDiscrepanciesModel, statisticsDiscrepancies?: StatisticsDiscrepanciesModel, homePlayersDiscrepancies?: PlayerRushingReceivingDiscrepanciesModel, awayPlayersDiscrepancies?: PlayerRushingReceivingDiscrepanciesModel, foo?:string) {
     this.gameDiscrepancies = gameDiscrepancies;
     this.statisticsDiscrepancies = statisticsDiscrepancies;
     this.homePlayersDiscrepancies = homePlayersDiscrepancies;

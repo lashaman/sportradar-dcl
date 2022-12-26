@@ -6,3 +6,4 @@ export * from './player-rushing-recieving-discrepancies.model';
 export * from './statistics-discrepancies.model';
 export * from './statistics-total-discrepancies.model';
 export * from './all-discrepancies.model';
+export * from './local-game.model';

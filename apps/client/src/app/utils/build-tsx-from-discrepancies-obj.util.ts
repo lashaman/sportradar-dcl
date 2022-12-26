@@ -10,3 +10,4 @@ const buildTsxFromDiscrepanciesObj = (statisticsDiscrepancies: Object) => {
 }
 
 export default buildTsxFromDiscrepanciesObj;
+

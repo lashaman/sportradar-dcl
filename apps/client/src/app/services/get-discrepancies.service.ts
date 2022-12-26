@@ -1,4 +1,5 @@
 import axios from "axios";
+import {apiUrls} from "../utils/api-urls";
 
 class GetDiscrepanciesService {
   static instance: GetDiscrepanciesService;
@@ -9,9 +10,12 @@ class GetDiscrepanciesService {
     return GetDiscrepanciesService.instance;
   }
   async getDiscrepancies(type: string): Promise<any> {
-    const response = await axios.get(`http://localhost:3333/api/discrepancies/get?type=${type}`);
+    const response = await axios.get(`${apiUrls.base}/discrepancies/get?type=${type}`);
+    console.log(response);
     return response.data;
   }
 }
 
 export default  GetDiscrepanciesService.getInstance();
+
+
